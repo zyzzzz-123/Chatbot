@@ -60,7 +60,7 @@ export function startRound(match) {
     koiCalled: { host: false, guest: false },
     pending: null, // staged card mid-turn awaiting pair choice
     lastEvent: { kind: 'deal' },
-    log: [`第${match.round}局 開始 — 親: ${match.players[oya]}`],
+    log: [`第 ${match.round} 局开始 — 庄家：${match.players[oya]}`],
   };
   return match.state;
 }
@@ -133,7 +133,7 @@ export function actPlayHand(match, side, cardId, choiceId) {
   s.lastEvent = { kind: 'play_hand', side, played: cardId, result: r };
   s.pending = null;
   s.phase = PHASES.DRAW_DECK;
-  s.log.push(`${match.players[side]}が手札 ${card.name} を出した`);
+  s.log.push(`${match.players[side]} 出牌：${card.name}`);
   return s;
 }
 
@@ -176,12 +176,12 @@ export function actDrawDeck(match, side) {
     s.phase = PHASES.PICK_DRAW_PAIR;
     s.pending = { source: 'deck', played: drawn, candidates: matches };
     s.lastEvent = { kind: 'await_pair', source: 'deck', played: drawn, candidates: matches };
-    s.log.push(`${match.players[side]}が山札から ${card.name} を引いた`);
+    s.log.push(`${match.players[side]} 翻到：${card.name}`);
     return s;
   }
   applyMatch(s, side, drawn, matches, null, 'deck');
   s.lastEvent = { kind: 'draw_deck', side, played: drawn };
-  s.log.push(`${match.players[side]}が山札から ${card.name} を引いた`);
+  s.log.push(`${match.players[side]} 翻到：${card.name}`);
   return finishTurnAfterDraw(match, side);
 }
 
@@ -191,7 +191,7 @@ function finishTurnAfterDraw(match, side) {
   if (improved) {
     s.phase = PHASES.KOI_DECISION;
     s.lastEvent = { kind: 'yaku_made', side, yaku: s.yaku[side] };
-    s.log.push(`${match.players[side]}が役を作った！`);
+    s.log.push(`${match.players[side]} 成役！`);
     return s;
   }
   return advanceTurn(match);
@@ -224,7 +224,7 @@ export function actKoiKoi(match, side) {
   s.koiCalled[side] = true;
   s.yakuAtKoi[side] = JSON.parse(JSON.stringify(s.yaku[side]));
   s.lastEvent = { kind: 'koi_koi', side };
-  s.log.push(`${match.players[side]}が こいこい！`);
+  s.log.push(`${match.players[side]} 宣告：来来！`);
   return advanceTurn(match);
 }
 
@@ -249,8 +249,8 @@ function endRound(match, winner) {
     oya: s.oya,
   });
   s.log.push(winnerSide
-    ? `${match.players[winnerSide]} が ${pts} 点で勝ち！`
-    : `引き分け（手札切れ）`);
+    ? `${match.players[winnerSide]} 获胜 ${pts} 文！`
+    : `平局（手牌打完）`);
 
   // Oya rotation: winner becomes next oya; on draw, oya stays.
   if (winnerSide) match.oya = winnerSide;

@@ -37,14 +37,14 @@ export function evaluateYaku(captured) {
     const extra = Math.max(0, g.tane.length - 3);
     yaku.push({ key: 'inoshikachou', name: '猪鹿蝶', points: 5 + extra });
   } else if (g.tane.length >= 5) {
-    yaku.push({ key: 'tane', name: 'タネ', points: 1 + (g.tane.length - 5) });
+    yaku.push({ key: 'tane', name: '种', points: 1 + (g.tane.length - 5) });
   }
 
   const sake = g.tane.find(c => c.sake);
   const cherry = g.hikari.find(c => c.hanami);
   const moon = g.hikari.find(c => c.tsukimi);
-  if (sake && cherry) yaku.push({ key: 'hanami', name: '花見で一杯', points: 5 });
-  if (sake && moon)   yaku.push({ key: 'tsukimi', name: '月見で一杯', points: 5 });
+  if (sake && cherry) yaku.push({ key: 'hanami', name: '花见酒', points: 5 });
+  if (sake && moon)   yaku.push({ key: 'tsukimi', name: '月见酒', points: 5 });
 
   // --- Tanzaku family ---
   const aka = g.tanzaku.filter(c => c.ribbon === 'aka').length === 3;
@@ -52,12 +52,12 @@ export function evaluateYaku(captured) {
   if (aka) yaku.push({ key: 'akatan', name: '赤短', points: 5 });
   if (ao)  yaku.push({ key: 'aotan',  name: '青短', points: 5 });
   if (g.tanzaku.length >= 5) {
-    yaku.push({ key: 'tan', name: 'タン', points: 1 + (g.tanzaku.length - 5) });
+    yaku.push({ key: 'tan', name: '短', points: 1 + (g.tanzaku.length - 5) });
   }
 
   // --- Kasu ---
   if (g.kasu.length >= 10) {
-    yaku.push({ key: 'kasu', name: 'カス', points: 1 + (g.kasu.length - 10) });
+    yaku.push({ key: 'kasu', name: '皮', points: 1 + (g.kasu.length - 10) });
   }
 
   return yaku;

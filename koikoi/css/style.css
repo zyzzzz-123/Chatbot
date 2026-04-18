@@ -61,6 +61,7 @@ main { max-width: 720px; margin: 0 auto; padding: 8px; }
 .rules { background: var(--panel); border-radius: 8px; padding: 8px 12px; font-size: 13px; }
 .rules summary { cursor: pointer; color: var(--accent-2); font-weight: 700; padding: 4px 0; }
 .rules ul { margin: 8px 0; padding-left: 18px; line-height: 1.6; }
+.rules-h3 { margin: 10px 0 4px; font-size: 14px; color: var(--accent-2); }
 
 .hidden { display: none !important; }
 

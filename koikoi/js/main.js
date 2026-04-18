@@ -53,20 +53,20 @@ function handleFieldClick(cid) {
   if (s.turn !== session.mySide) return;
   if (s.phase === PHASES.PLAY_HAND) {
     if (!session.selectedHand) {
-      setStatus('まず手札を選んでください', 'warn');
+      setStatus('请先选择一张手牌', 'warn');
       return;
     }
     const handCard = CARD_BY_ID[session.selectedHand];
     const fieldCard = CARD_BY_ID[cid];
     if (handCard.month !== fieldCard.month) {
-      setStatus('月が合いません', 'warn');
+      setStatus('月份不匹配', 'warn');
       return;
     }
     sendAction({ type: 'play_hand', cardId: session.selectedHand, choiceId: cid });
     session.selectedHand = null;
   } else if (s.phase === PHASES.PICK_HAND_PAIR || s.phase === PHASES.PICK_DRAW_PAIR) {
     if (!s.pending.candidates.includes(cid)) {
-      setStatus('そのカードは選べません', 'warn');
+      setStatus('这张牌无法选择', 'warn');
       return;
     }
     sendAction({ type: 'pick_pair', choiceId: cid });
@@ -95,7 +95,7 @@ function applyHostAction(side, action) {
         break;
     }
   } catch (e) {
-    setStatus('反則: ' + e.message, 'warn');
+    setStatus('非法操作：' + e.message, 'warn');
     return;
   }
   session.view = viewFor(m, session.mySide);
@@ -105,35 +105,35 @@ function applyHostAction(side, action) {
 
 // ---- Lobby ----
 async function onCreateRoom() {
-  const name = ($('host-name').value || '').trim() || 'Host';
+  const name = ($('host-name').value || '').trim() || '庄家';
   session.myName = name;
   session.role = 'host';
   session.mySide = 'host';
-  setStatus('ルームを作成中…');
+  setStatus('创建房间中…');
   try {
     const room = await createHost({
       onConnect: ({ send }) => { session.send = send; },
       onMessage: data => onHostMessage(data),
-      onClose:   () => setStatus('相手が切断しました', 'warn'),
-      onError:   err => setStatus('通信エラー: ' + (err.type || err.message), 'warn'),
+      onClose:   () => setStatus('对手已断开', 'warn'),
+      onError:   err => setStatus('通信错误：' + (err.type || err.message), 'warn'),
     });
     $('share-code').textContent = room.code;
     $('share-link').value = room.link;
     $('share-block').classList.remove('hidden');
-    setStatus(`ルーム ${room.code} を作成。相手の参加を待っています…`, 'ok');
+    setStatus(`房间 ${room.code} 已创建，等待对手加入…`, 'ok');
   } catch (e) {
-    setStatus('ルーム作成失敗: ' + (e.message || e.type), 'warn');
+    setStatus('创建失败：' + (e.message || e.type), 'warn');
   }
 }
 
 function onHostMessage(data) {
   if (data.type === 'hello') {
-    session.oppName = data.name || 'Guest';
+    session.oppName = data.name || '玩家';
     session.match = newMatch({ host: session.myName, guest: session.oppName });
     startRound(session.match);
     session.view = viewFor(session.match, 'host');
     session.send({ type: 'state', view: viewFor(session.match, 'guest') });
-    setStatus(`${session.oppName} が参加 — 対局開始！`, 'ok');
+    setStatus(`${session.oppName} 已加入 — 对局开始！`, 'ok');
     rerender();
   } else if (data.type === 'action') {
     applyHostAction(data.side, data.action);
@@ -142,25 +142,25 @@ function onHostMessage(data) {
 
 async function onJoinRoom() {
   const code = ($('join-code').value || '').trim().toUpperCase();
-  const name = ($('guest-name').value || '').trim() || 'Guest';
-  if (code.length < 4) { setStatus('ルームコードを入力してください', 'warn'); return; }
+  const name = ($('guest-name').value || '').trim() || '玩家';
+  if (code.length < 4) { setStatus('请输入房间号', 'warn'); return; }
   session.myName = name;
   session.role = 'guest';
   session.mySide = 'guest';
-  setStatus(`ルーム ${code} に接続中…`);
+  setStatus(`连接房间 ${code} 中…`);
   try {
     await joinHost(code, {
       onOpen: ({ send }) => {
         session.send = send;
         send({ type: 'hello', name });
-        setStatus('接続成功。配牌を待っています…', 'ok');
+        setStatus('连接成功，等待发牌…', 'ok');
       },
       onMessage: data => onGuestMessage(data),
-      onClose:   () => setStatus('ホストが切断しました', 'warn'),
-      onError:   err => setStatus('通信エラー: ' + (err.type || err.message), 'warn'),
+      onClose:   () => setStatus('庄家已断开', 'warn'),
+      onError:   err => setStatus('通信错误：' + (err.type || err.message), 'warn'),
     });
   } catch (e) {
-    setStatus('接続失敗: ' + (e.message || e.type), 'warn');
+    setStatus('连接失败：' + (e.message || e.type), 'warn');
   }
 }
 
@@ -179,8 +179,8 @@ function init() {
     const link = $('share-link').value;
     if (!link) return;
     navigator.clipboard.writeText(link).then(
-      () => setStatus('リンクをコピーしました', 'ok'),
-      () => setStatus('コピー失敗', 'warn')
+      () => setStatus('链接已复制', 'ok'),
+      () => setStatus('复制失败', 'warn')
     );
   };
 }

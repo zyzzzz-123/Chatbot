@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="ja">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#1a0d0d">
-<title>こいこい — オンライン花札</title>
+<title>来来花札（Koi-Koi）在线对战</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header id="topbar">
-  <h1>こいこい <small>オンライン花札</small></h1>
+  <h1>花札·来来 <small>在线联机</small></h1>
   <div id="status" data-kind="info"></div>
 </header>
 
@@ -18,43 +18,58 @@
   <!-- ROOM LOBBY -->
   <section id="lobby">
     <div class="card-panel">
-      <h2>ルームを作る</h2>
-      <p class="hint">あなたが「親」になります。発行された5文字コードを相手に伝えてください。</p>
-      <label>あなたの名前
-        <input id="host-name" type="text" maxlength="10" placeholder="ホスト">
+      <h2>创建房间</h2>
+      <p class="hint">你将作为"庄家"先手。创建后会得到一个 5 字符房间号，发给对手。</p>
+      <label>你的名字
+        <input id="host-name" type="text" maxlength="10" placeholder="庄家">
       </label>
-      <button class="btn-primary" id="btn-create">ルーム作成</button>
+      <button class="btn-primary" id="btn-create">创建房间</button>
       <div id="share-block" class="hidden">
-        <div class="share-code">コード: <span id="share-code"></span></div>
-        <label>共有リンク
+        <div class="share-code">房间号：<span id="share-code"></span></div>
+        <label>共享链接
           <input id="share-link" type="text" readonly>
         </label>
-        <button class="btn-secondary" id="btn-copy">リンクをコピー</button>
+        <button class="btn-secondary" id="btn-copy">复制链接</button>
       </div>
     </div>
 
-    <div class="divider">または</div>
+    <div class="divider">或</div>
 
     <div class="card-panel">
-      <h2>ルームに参加</h2>
-      <p class="hint">相手から教わったコード（5文字）を入力してください。</p>
-      <label>あなたの名前
-        <input id="guest-name" type="text" maxlength="10" placeholder="ゲスト">
+      <h2>加入房间</h2>
+      <p class="hint">输入对方给你的 5 字符房间号。</p>
+      <label>你的名字
+        <input id="guest-name" type="text" maxlength="10" placeholder="玩家">
       </label>
-      <label>ルームコード
+      <label>房间号
         <input id="join-code" type="text" maxlength="5" placeholder="ABCDE" autocapitalize="characters">
       </label>
-      <button class="btn-primary" id="btn-join">参加する</button>
+      <button class="btn-primary" id="btn-join">加入</button>
     </div>
 
     <details class="rules">
-      <summary>遊び方（簡略）</summary>
+      <summary>玩法规则（简版）</summary>
       <ul>
-        <li>各プレイヤーに手札8枚、場札8枚、残り24枚は山札。</li>
-        <li>自分の番：①手札を1枚出して、同じ月の場札があれば取る。②山札を1枚めくって、同じく月が合えば取る。</li>
-        <li>取った札で「役」が成立したら、<b>あがり</b>（点数を確定）か <b>こいこい</b>（続ける）を選ぶ。</li>
-        <li>こいこい後にもう1役以上できれば追加点、相手に役を作られると相手の点数が <b>×2</b>。</li>
-        <li>合計7文以上でも <b>×2</b>。全6局の合計点で勝負。</li>
+        <li>双方各有手牌 8 张，场上 8 张，牌堆 24 张。</li>
+        <li>轮到你时：①出一张手牌，和场上同月的牌配对取走；②翻开牌堆顶，同月则配对取走。</li>
+        <li>取到的牌能组成"役"时，选 <b>结算</b>（锁定得分）或 <b>来来</b>（继续凑更多役）。</li>
+        <li>"来来"后再成一役可加分；对手反而成役则对手得分 <b>×2</b>。</li>
+        <li>得 7 文以上额外 <b>×2</b>。全 6 局累计得分定胜负。</li>
+      </ul>
+      <h3 class="rules-h3">役一览</h3>
+      <ul>
+        <li><b>五光</b> 10 文 — 五张"光"札全收</li>
+        <li><b>四光</b> 8 文 — 四张光（不含雨）</li>
+        <li><b>雨四光</b> 7 文 — 四张光含柳雨</li>
+        <li><b>三光</b> 5 文 — 三张光（不含雨）</li>
+        <li><b>猪鹿蝶</b> 5 文 — 猪、鹿、蝶三张"种"</li>
+        <li><b>花见酒</b> 5 文 — 樱幕 + 菊酒杯</li>
+        <li><b>月见酒</b> 5 文 — 满月 + 菊酒杯</li>
+        <li><b>赤短</b> 5 文 — 三张诗笺（松/梅/樱）</li>
+        <li><b>青短</b> 5 文 — 三张青短（牡丹/菊/枫）</li>
+        <li><b>种</b> 1 文起 — 动物札 5 张，每多一张 +1</li>
+        <li><b>短</b> 1 文起 — 缎带 5 张，每多一张 +1</li>
+        <li><b>皮</b> 1 文起 — 素札 10 张，每多一张 +1</li>
       </ul>
     </details>
   </section>
@@ -80,7 +95,7 @@
     </div>
 
     <div id="actionbar"></div>
-    <details id="log-panel"><summary>ログ</summary><div id="log"></div></details>
+    <details id="log-panel"><summary>对局日志</summary><div id="log"></div></details>
   </section>
 </main>
 

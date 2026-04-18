@@ -8,7 +8,7 @@ import { CARD_BY_ID, FLOWER_COLOR, FLOWERS, TYPE_LABEL } from './cards.js';
 const W = 100, H = 160;
 
 const RIBBON_COLOR = { aka: '#c93636', ao: '#2a4f9e', red: '#c93636' };
-const RIBBON_TEXT  = { aka: 'あかよろし', ao: '', red: '' };
+const RIBBON_TEXT  = { aka: '诗笺', ao: '青短', red: '' };
 
 function flowerGlyph(month) {
   // Simple stylised flower drawn with circles/strokes per month.
@@ -105,7 +105,7 @@ export function renderCard(cardId, opts = {}) {
   const card = CARD_BY_ID[cardId];
   if (!card) return '';
   const flower = FLOWERS[card.month];
-  const typeLbl = TYPE_LABEL[card.type].jp;
+  const typeLbl = TYPE_LABEL[card.type].zh;
   const baseColor = FLOWER_COLOR[card.month];
   const cls = [
     'hf-card',
@@ -129,7 +129,7 @@ export function renderCard(cardId, opts = {}) {
     ${flowerGlyph(card.month)}
     ${ribbonOverlay(card)}
     ${specialOverlay(card)}
-    <text x="50" y="${H-8}" text-anchor="middle" font-size="8" fill="#3a3a3a" font-family="serif">${flower.jp}</text>
+    <text x="50" y="${H-8}" text-anchor="middle" font-size="8" fill="#3a3a3a" font-family="serif">${flower.name}</text>
   </svg>`;
 }
 
